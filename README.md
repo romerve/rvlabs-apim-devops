@@ -150,3 +150,9 @@ Let's review how this works:
 5. Merging into master triggers *Github Actions* to deploy to prod
 
 Because the templates' parameters files already target prod there is no need to override anything, therefore, the CD workflow simply deploys any templates it finds in *contoso* and *apis*.
+
+Now that Dev and Prod are deploying successfully, we apply RBAC permissions to Prod just to make sure that no one can access the resource via the portal, cli, powershell, etc and make "unmannaged" changes. This can be done by:
+1. Launch the Azure Portal and select the Prod Resource Group
+2. Select Access Control (IAM)
+3. Remove any previously assigned roles
+
