@@ -1,0 +1,24 @@
+version: 0.0.1   # Required - Test comment - test2 - t3
+apimServiceName: apim-contoso   # Required, must match name of an apim service deployed in the specified resource group
+apis:
+  - name: petstore   # Required
+    openApiSpec: ./apis/petstore/petstore.json    # Required, can be url or local file
+    #openApiSpec: https://petstore.swagger.io/v2/swagger.json
+    policy: ./apis/petstore/apiPolicyHeaders.xml   # Optional, can be url or local file
+    suffix: petstore   # Required
+    revision: 1   # Optional
+    revisionDescription: My first revision   # Optional
+    operations:   # Optional
+      addPet: # Must match the operationId property of a path's operations
+        policy: ./apis/petstore/operationRateLimit.xml   # Optional, can be url or local file
+      deletePet:  # Must match the operationId property of a path's operations
+        policy: ./apis/petstore/operationRateLimit.xml   # Optional, can be url or local file
+    authenticationSettings:   # Optional
+      subscriptionKeyRequired: false
+      #oAuth2:
+      #    authorizationServerId: apimgmtaad
+      #    scope: scope
+    products: starter    # Optional, adds api to the specified products
+outputLocation: ./apis/petstore/arm   # Required, folder the creator will write the templates to
+linked: true   # Optional
+linkedTemplatesBaseUrl : https://raw.githubusercontent.com/romerve/rvlabs-apim-devops/master/apis

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "ApimServiceName": {
+      "value": "apims-prod-contoso"
+    },
+    "LinkedTemplatesBaseUrl": {
+      "value": "https://raw.githubusercontent.com/romerve/rvlabs-apim-devops/master/contoso"
+    },
+    "PolicyXMLBaseUrl": {
+      "value": "https://raw.githubusercontent.com/romerve/rvlabs-apim-devops/master/contoso/policies"
+    },
+    "serviceUrl": {
+      "value": {
+        "echoapi": "http://url.com"
+      }
+    },
+    "NamedValues": {
+      "value": {
+        "xma": "-AHTTP_2#API2,JSON"
+      }
+    },
+    "ApiLoggerId": {
+      "value": {}
+    },
+    "LoggerResourceId": {
+      "value": {}
+    }
+  },
+  "resources": []
+}

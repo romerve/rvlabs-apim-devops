@@ -1,0 +1,1757 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "ApimServiceName": {
+      "type": "string"
+    },
+    "PolicyXMLBaseUrl": {
+      "type": "string"
+    },
+    "serviceUrl": {
+      "type": "object"
+    },
+    "ApiLoggerId": {
+      "type": "object"
+    }
+  },
+  "resources": [
+    {
+      "properties": {
+        "authenticationSettings": {
+          "subscriptionKeyRequired": false
+        },
+        "subscriptionKeyParameterNames": {
+          "header": "Ocp-Apim-Subscription-Key",
+          "query": "subscription-key"
+        },
+        "apiRevision": "1",
+        "isCurrent": true,
+        "subscriptionRequired": true,
+        "displayName": "Echo API",
+        "serviceUrl": "[parameters('serviceUrl').echoapi]",
+        "path": "echo",
+        "protocols": [
+          "https"
+        ]
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/echo-api')]",
+      "type": "Microsoft.ApiManagement/service/apis",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "A demonstration of a POST call based on the echo backend above. The request body is expected to contain JSON-formatted data (see example below). A policy is used to automatically transform any request sent in JSON directly to XML. In a real-world scenario this could be used to enable modern clients to speak to a legacy backend.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": [
+            {
+              "contentType": "application/json",
+              "sample": "{\r\n\t\"vehicleType\": \"train\",\r\n\t\"maxSpeed\": 125,\r\n\t\"avgSpeed\": 90,\r\n\t\"speedUnit\": \"mph\"\r\n}"
+            }
+          ]
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "headers": [],
+            "representations": []
+          }
+        ],
+        "displayName": "Create resource",
+        "method": "POST",
+        "urlTemplate": "/resource"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/echo-api/create-resource')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'echo-api')]"
+      ]
+    },
+    {
+      "properties": {
+        "value": "[concat(parameters('PolicyXMLBaseUrl'), '/echo-api-create-resource-operationPolicy.xml')]",
+        "format": "rawxml-link"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/echo-api/create-resource/policy')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'echo-api', 'create-resource')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "A demonstration of a PUT call handled by the same \"echo\" backend as above. You can now specify a request body in addition to headers and it will be returned as well.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "headers": [],
+            "representations": []
+          }
+        ],
+        "displayName": "Modify Resource",
+        "method": "PUT",
+        "urlTemplate": "/resource"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/echo-api/modify-resource')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'echo-api')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "A demonstration of a DELETE call which traditionally deletes the resource. It is based on the same \"echo\" backend as in all other operations so nothing is actually deleted.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "headers": [],
+            "representations": []
+          }
+        ],
+        "displayName": "Remove resource",
+        "method": "DELETE",
+        "urlTemplate": "/resource"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/echo-api/remove-resource')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'echo-api')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "The HEAD operation returns only headers. In this demonstration a policy is used to set additional headers when the response is returned and to enable JSONP.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "headers": [],
+            "representations": []
+          }
+        ],
+        "displayName": "Retrieve header only",
+        "method": "HEAD",
+        "urlTemplate": "/resource"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/echo-api/retrieve-header-only')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'echo-api')]"
+      ]
+    },
+    {
+      "properties": {
+        "value": "[concat(parameters('PolicyXMLBaseUrl'), '/echo-api-retrieve-header-only-operationPolicy.xml')]",
+        "format": "rawxml-link"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/echo-api/retrieve-header-only/policy')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'echo-api', 'retrieve-header-only')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "A demonstration of a GET call on a sample resource. It is handled by an \"echo\" backend which returns a response equal to the request (the supplied headers and body are being returned as received).",
+        "request": {
+          "queryParameters": [
+            {
+              "name": "param1",
+              "description": "A sample parameter that is required and has a default value of \"sample\".",
+              "type": "string",
+              "defaultValue": "sample",
+              "required": true,
+              "values": [
+                "sample"
+              ]
+            },
+            {
+              "name": "param2",
+              "description": "Another sample parameter, set to not required.",
+              "type": "number",
+              "required": false,
+              "values": []
+            }
+          ],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "Returned in all cases.",
+            "headers": [],
+            "representations": []
+          }
+        ],
+        "displayName": "Retrieve resource",
+        "method": "GET",
+        "urlTemplate": "/resource"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/echo-api/retrieve-resource')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'echo-api')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "A demonstration of a GET call with caching enabled on the same \"echo\" backend as above. Cache TTL is set to 1 hour. When you make the first request the headers you supplied will be cached. Subsequent calls will return the same headers as the first time even if you change them in your request.",
+        "request": {
+          "queryParameters": [
+            {
+              "name": "param1",
+              "description": "A sample parameter that is required and has a default value of \"sample\".",
+              "type": "string",
+              "defaultValue": "sample",
+              "required": true,
+              "values": [
+                "sample"
+              ]
+            },
+            {
+              "name": "param2",
+              "description": "Another sample parameter, set to not required.",
+              "type": "string",
+              "required": false,
+              "values": []
+            }
+          ],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "headers": [],
+            "representations": []
+          }
+        ],
+        "displayName": "Retrieve resource (cached)",
+        "method": "GET",
+        "urlTemplate": "/resource-cached"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/echo-api/retrieve-resource-cached')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'echo-api')]"
+      ]
+    },
+    {
+      "properties": {
+        "value": "[concat(parameters('PolicyXMLBaseUrl'), '/echo-api-retrieve-resource-cached-operationPolicy.xml')]",
+        "format": "rawxml-link"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/echo-api/retrieve-resource-cached/policy')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'echo-api', 'retrieve-resource-cached')]"
+      ]
+    },
+    {
+      "properties": {
+        "value": "[concat(parameters('PolicyXMLBaseUrl'), '/echo-api-apiPolicy.xml')]",
+        "format": "rawxml-link"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/echo-api/policy')]",
+      "type": "Microsoft.ApiManagement/service/apis/policies",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'echo-api')]"
+      ]
+    },
+    {
+      "properties": {},
+      "name": "[concat(parameters('ApimServiceName'), '/starter/echo-api')]",
+      "type": "Microsoft.ApiManagement/service/products/apis",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'echo-api')]"
+      ]
+    },
+    {
+      "properties": {},
+      "name": "[concat(parameters('ApimServiceName'), '/unlimited/echo-api')]",
+      "type": "Microsoft.ApiManagement/service/products/apis",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'echo-api')]"
+      ]
+    },
+    {
+      "properties": {
+        "description": "This is a sample server Petstore server.  You can find out more about Swagger at <a href=\"http://swagger.io\">http://swagger.io</a> or on irc.freenode.net, #swagger.  For this sample, you can use the api key \"special-key\" to test the authorization filters",
+        "authenticationSettings": {
+          "subscriptionKeyRequired": false
+        },
+        "subscriptionKeyParameterNames": {
+          "header": "Ocp-Apim-Subscription-Key",
+          "query": "subscription-key"
+        },
+        "apiRevision": "1",
+        "isCurrent": true,
+        "subscriptionRequired": true,
+        "displayName": "Petstore",
+        "serviceUrl": "[parameters('serviceUrl').swaggerpetstoreyaml]",
+        "path": "",
+        "protocols": [
+          "http"
+        ]
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml')]",
+      "type": "Microsoft.ApiManagement/service/apis",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "properties": {
+        "contentType": "application/vnd.ms-azure-apim.swagger.definitions+json",
+        "document": {
+          "value": "{\"Order\":{\"properties\":{\"id\":{\"type\":\"integer\",\"format\":\"int64\"},\"petId\":{\"type\":\"integer\",\"format\":\"int64\"},\"quantity\":{\"type\":\"integer\",\"format\":\"int32\"},\"shipDate\":{\"type\":\"string\",\"format\":\"date-time\"},\"status\":{\"type\":\"string\",\"description\":\"Order Status\",\"enum\":[\"placed\",\"approved\",\"delivered\"]},\"complete\":{\"type\":\"boolean\"}},\"xml\":{\"name\":\"Order\"}},\"Category\":{\"properties\":{\"id\":{\"type\":\"integer\",\"format\":\"int64\"},\"name\":{\"type\":\"string\"}},\"xml\":{\"name\":\"Category\"}},\"User\":{\"properties\":{\"id\":{\"type\":\"integer\",\"format\":\"int64\"},\"username\":{\"type\":\"string\"},\"firstName\":{\"type\":\"string\"},\"lastName\":{\"type\":\"string\"},\"email\":{\"type\":\"string\"},\"password\":{\"type\":\"string\"},\"phone\":{\"type\":\"string\"},\"userStatus\":{\"type\":\"integer\",\"format\":\"int32\",\"description\":\"User Status\"}},\"xml\":{\"name\":\"User\"}},\"Tag\":{\"properties\":{\"id\":{\"type\":\"integer\",\"format\":\"int64\"},\"name\":{\"type\":\"string\"}},\"xml\":{\"name\":\"Tag\"}},\"Pet\":{\"required\":[\"name\",\"photoUrls\"],\"properties\":{\"id\":{\"type\":\"integer\",\"format\":\"int64\"},\"category\":{\"$ref\":\"#/definitions/Category\"},\"name\":{\"type\":\"string\",\"example\":\"doggie\"},\"photoUrls\":{\"type\":\"array\",\"xml\":{\"name\":\"photoUrl\",\"wrapped\":true},\"items\":{\"type\":\"string\"}},\"tags\":{\"type\":\"array\",\"xml\":{\"name\":\"tag\",\"wrapped\":true},\"items\":{\"$ref\":\"#/definitions/Tag\"}},\"status\":{\"type\":\"string\",\"description\":\"pet status in the store\",\"enum\":[\"available\",\"pending\",\"sold\"]}},\"xml\":{\"name\":\"Pet\"}},\"ApiResponse\":{\"properties\":{\"code\":{\"type\":\"integer\",\"format\":\"int32\"},\"type\":{\"type\":\"string\"},\"message\":{\"type\":\"string\"}},\"xml\":{\"name\":\"##default\"}},\"PetArray\":{\"type\":\"array\",\"items\":{\"$ref\":\"#/definitions/Pet\"}},\"StoreInventoryGet200ApplicationJsonResponse\":{\"type\":\"object\",\"additionalProperties\":{\"type\":\"integer\",\"format\":\"int32\"}},\"UserArray\":{\"type\":\"array\",\"items\":{\"$ref\":\"#/definitions/User\"}},\"UserLoginGet200ApplicationXmlResponse\":{\"type\":\"string\"},\"UserLoginGet200ApplicationJsonResponse\":{\"type\":\"string\"}}"
+        }
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/5ea5e2fd02419a12083d2a81')]",
+      "type": "Microsoft.ApiManagement/service/apis/schemas",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "",
+        "request": {
+          "description": "Pet object that needs to be added to the store",
+          "queryParameters": [],
+          "headers": [],
+          "representations": [
+            {
+              "contentType": "application/json",
+              "schemaId": "5ea5e2fd02419a12083d2a81",
+              "typeName": "Pet"
+            },
+            {
+              "contentType": "application/xml",
+              "schemaId": "5ea5e2fd02419a12083d2a81",
+              "typeName": "Pet"
+            }
+          ]
+        },
+        "responses": [
+          {
+            "statusCode": 405,
+            "description": "Invalid input",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Add a new pet to the store",
+        "method": "POST",
+        "urlTemplate": "/pet"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/addPet')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "pet"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/addPet/pet')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'addPet')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "This can only be done by the logged in user.",
+        "request": {
+          "description": "Created user object",
+          "queryParameters": [],
+          "headers": [],
+          "representations": [
+            {
+              "contentType": "application/json",
+              "schemaId": "5ea5e2fd02419a12083d2a81",
+              "typeName": "User"
+            }
+          ]
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "successful operation",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Create user",
+        "method": "POST",
+        "urlTemplate": "/user"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/createUser')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "user"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/createUser/user')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'createUser')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "",
+        "request": {
+          "description": "List of user object",
+          "queryParameters": [],
+          "headers": [],
+          "representations": [
+            {
+              "contentType": "application/json",
+              "schemaId": "5ea5e2fd02419a12083d2a81",
+              "typeName": "UserArray"
+            }
+          ]
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "successful operation",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Creates list of users with given input array",
+        "method": "POST",
+        "urlTemplate": "/user/createWithList"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/createUsersWithListInput')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "user"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/createUsersWithListInput/user')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'createUsersWithListInput')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "",
+        "request": {
+          "description": "List of user object",
+          "queryParameters": [],
+          "headers": [],
+          "representations": [
+            {
+              "contentType": "application/json",
+              "schemaId": "5ea5e2fd02419a12083d2a81",
+              "typeName": "UserArray"
+            }
+          ]
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "successful operation",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Creates list of users with given input array",
+        "method": "POST",
+        "urlTemplate": "/user/createWithArray"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/createUsersWithArrayInput')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "user"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/createUsersWithArrayInput/user')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'createUsersWithArrayInput')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "orderId",
+            "description": "ID of the order that needs to be deleted",
+            "type": "string",
+            "required": true,
+            "values": []
+          }
+        ],
+        "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [
+          {
+            "statusCode": 400,
+            "description": "Invalid ID supplied",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          },
+          {
+            "statusCode": 404,
+            "description": "Order not found",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Delete purchase order by ID",
+        "method": "DELETE",
+        "urlTemplate": "/store/order/{orderId}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/deleteOrder')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "store"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/deleteOrder/store')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'deleteOrder')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "username",
+            "description": "The name that needs to be deleted",
+            "type": "string",
+            "required": true,
+            "values": []
+          }
+        ],
+        "description": "This can only be done by the logged in user.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [
+          {
+            "statusCode": 400,
+            "description": "Invalid username supplied",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          },
+          {
+            "statusCode": 404,
+            "description": "User not found",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Delete user",
+        "method": "DELETE",
+        "urlTemplate": "/user/{username}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/deleteUser')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "user"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/deleteUser/user')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'deleteUser')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "petId",
+            "description": "Format - int64. Pet id to delete",
+            "type": "integer",
+            "required": true,
+            "values": []
+          }
+        ],
+        "description": "",
+        "request": {
+          "queryParameters": [],
+          "headers": [
+            {
+              "name": "api_key",
+              "description": "",
+              "type": "string",
+              "required": false,
+              "values": []
+            }
+          ],
+          "representations": [
+            {
+              "contentType": "multipart/form-data"
+            },
+            {
+              "contentType": "application/x-www-form-urlencoded"
+            }
+          ]
+        },
+        "responses": [
+          {
+            "statusCode": 400,
+            "description": "Invalid pet value",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Deletes a pet",
+        "method": "DELETE",
+        "urlTemplate": "/pet/{petId}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/deletePet')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "pet"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/deletePet/pet')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'deletePet')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "petId",
+            "description": "Format - int64. ID of pet to return",
+            "type": "integer",
+            "required": true,
+            "values": []
+          }
+        ],
+        "description": "Returns a single pet",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": [
+            {
+              "contentType": "application/x-www-form-urlencoded"
+            }
+          ]
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "successful operation",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "Pet"
+              },
+              {
+                "contentType": "application/json",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "Pet"
+              }
+            ]
+          },
+          {
+            "statusCode": 400,
+            "description": "Invalid ID supplied",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          },
+          {
+            "statusCode": 404,
+            "description": "Pet not found",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Find pet by ID",
+        "method": "GET",
+        "urlTemplate": "/pet/{petId}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/getPetById')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "pet"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/getPetById/pet')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'getPetById')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "orderId",
+            "description": "ID of pet that needs to be fetched",
+            "type": "string",
+            "required": true,
+            "values": []
+          }
+        ],
+        "description": "For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "successful operation",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "Order"
+              },
+              {
+                "contentType": "application/json",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "Order"
+              }
+            ]
+          },
+          {
+            "statusCode": 400,
+            "description": "Invalid ID supplied",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          },
+          {
+            "statusCode": 404,
+            "description": "Order not found",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Find purchase order by ID",
+        "method": "GET",
+        "urlTemplate": "/store/order/{orderId}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/getOrderById')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "store"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/getOrderById/store')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'getOrderById')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Multiple status values can be provided with comma separated strings",
+        "request": {
+          "queryParameters": [
+            {
+              "name": "status",
+              "description": "Status values that need to be considered for filter",
+              "type": "array",
+              "defaultValue": "available",
+              "required": false,
+              "values": [
+                "available",
+                "pending",
+                "sold"
+              ]
+            }
+          ],
+          "headers": [],
+          "representations": [
+            {
+              "contentType": "multipart/form-data"
+            },
+            {
+              "contentType": "application/x-www-form-urlencoded"
+            }
+          ]
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "successful operation",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "PetArray"
+              },
+              {
+                "contentType": "application/json",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "PetArray"
+              }
+            ]
+          },
+          {
+            "statusCode": 400,
+            "description": "Invalid status value",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Finds Pets by status",
+        "method": "GET",
+        "urlTemplate": "/pet/findByStatus"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/findPetsByStatus')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "pet"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/findPetsByStatus/pet')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'findPetsByStatus')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+        "request": {
+          "queryParameters": [
+            {
+              "name": "tags",
+              "description": "Tags to filter by",
+              "type": "array",
+              "required": false,
+              "values": []
+            }
+          ],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "successful operation",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "PetArray"
+              },
+              {
+                "contentType": "application/json",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "PetArray"
+              }
+            ]
+          },
+          {
+            "statusCode": 400,
+            "description": "Invalid tag value",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Finds Pets by tags",
+        "method": "GET",
+        "urlTemplate": "/pet/findByTags"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/findPetsByTags')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "pet"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/findPetsByTags/pet')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'findPetsByTags')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "username",
+            "description": "The name that needs to be fetched. Use user1 for testing. ",
+            "type": "string",
+            "required": true,
+            "values": []
+          }
+        ],
+        "description": "",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "successful operation",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "User"
+              },
+              {
+                "contentType": "application/json",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "User"
+              }
+            ]
+          },
+          {
+            "statusCode": 400,
+            "description": "Invalid username supplied",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          },
+          {
+            "statusCode": 404,
+            "description": "User not found",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Get user by user name",
+        "method": "GET",
+        "urlTemplate": "/user/{username}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/getUserByName')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "user"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/getUserByName/user')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'getUserByName')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "successful operation",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Logs out current logged in user session",
+        "method": "GET",
+        "urlTemplate": "/user/logout"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/logoutUser')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "user"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/logoutUser/user')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'logoutUser')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "",
+        "request": {
+          "queryParameters": [
+            {
+              "name": "username",
+              "description": "The user name for login",
+              "type": "string",
+              "required": false,
+              "values": []
+            },
+            {
+              "name": "password",
+              "description": "The password for login in clear text",
+              "type": "string",
+              "required": false,
+              "values": []
+            }
+          ],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "successful operation",
+            "headers": [
+              {
+                "name": "X-Rate-Limit",
+                "description": "calls per hour allowed by the user",
+                "type": "integer",
+                "required": false,
+                "values": []
+              },
+              {
+                "name": "X-Expires-After",
+                "description": "date in UTC when toekn expires",
+                "type": "string",
+                "required": false,
+                "values": []
+              }
+            ],
+            "representations": [
+              {
+                "contentType": "application/xml",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "UserLoginGet200ApplicationXmlResponse"
+              },
+              {
+                "contentType": "application/json",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "UserLoginGet200ApplicationJsonResponse"
+              }
+            ]
+          },
+          {
+            "statusCode": 400,
+            "description": "Invalid username/password supplied",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Logs user into the system",
+        "method": "GET",
+        "urlTemplate": "/user/login"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/loginUser')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "user"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/loginUser/user')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'loginUser')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "",
+        "request": {
+          "description": "order placed for purchasing the pet",
+          "queryParameters": [],
+          "headers": [],
+          "representations": [
+            {
+              "contentType": "application/json",
+              "schemaId": "5ea5e2fd02419a12083d2a81",
+              "typeName": "Order"
+            }
+          ]
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "successful operation",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "Order"
+              },
+              {
+                "contentType": "application/json",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "Order"
+              }
+            ]
+          },
+          {
+            "statusCode": 400,
+            "description": "Invalid Order",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Place an order for a pet",
+        "method": "POST",
+        "urlTemplate": "/store/order"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/placeOrder')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "store"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/placeOrder/store')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'placeOrder')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns a map of status codes to quantities",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "successful operation",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/json",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "StoreInventoryGet200ApplicationJsonResponse"
+              }
+            ]
+          }
+        ],
+        "displayName": "Returns pet inventories by status",
+        "method": "GET",
+        "urlTemplate": "/store/inventory"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/getInventory')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "store"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/getInventory/store')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'getInventory')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "",
+        "request": {
+          "description": "Pet object that needs to be added to the store",
+          "queryParameters": [],
+          "headers": [],
+          "representations": [
+            {
+              "contentType": "application/json",
+              "schemaId": "5ea5e2fd02419a12083d2a81",
+              "typeName": "Pet"
+            },
+            {
+              "contentType": "application/xml",
+              "schemaId": "5ea5e2fd02419a12083d2a81",
+              "typeName": "Pet"
+            }
+          ]
+        },
+        "responses": [
+          {
+            "statusCode": 400,
+            "description": "Invalid ID supplied",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          },
+          {
+            "statusCode": 404,
+            "description": "Pet not found",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          },
+          {
+            "statusCode": 405,
+            "description": "Validation exception",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Update an existing pet",
+        "method": "PUT",
+        "urlTemplate": "/pet"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/updatePet')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "pet"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/updatePet/pet')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'updatePet')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "username",
+            "description": "name that need to be deleted",
+            "type": "string",
+            "required": true,
+            "values": []
+          }
+        ],
+        "description": "This can only be done by the logged in user.",
+        "request": {
+          "description": "Updated user object",
+          "queryParameters": [],
+          "headers": [],
+          "representations": [
+            {
+              "contentType": "application/json",
+              "schemaId": "5ea5e2fd02419a12083d2a81",
+              "typeName": "User"
+            }
+          ]
+        },
+        "responses": [
+          {
+            "statusCode": 400,
+            "description": "Invalid user supplied",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          },
+          {
+            "statusCode": 404,
+            "description": "User not found",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Updated user",
+        "method": "PUT",
+        "urlTemplate": "/user/{username}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/updateUser')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "user"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/updateUser/user')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'updateUser')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "petId",
+            "description": "ID of pet that needs to be updated",
+            "type": "string",
+            "required": true,
+            "values": []
+          }
+        ],
+        "description": "",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": [
+            {
+              "contentType": "application/x-www-form-urlencoded",
+              "formParameters": [
+                {
+                  "name": "name",
+                  "description": "Updated name of the pet",
+                  "type": "string",
+                  "required": false,
+                  "values": []
+                },
+                {
+                  "name": "status",
+                  "description": "Updated status of the pet",
+                  "type": "string",
+                  "required": false,
+                  "values": []
+                }
+              ]
+            }
+          ]
+        },
+        "responses": [
+          {
+            "statusCode": 405,
+            "description": "Invalid input",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/xml"
+              },
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ],
+        "displayName": "Updates a pet in the store with form data",
+        "method": "POST",
+        "urlTemplate": "/pet/{petId}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/updatePetWithForm')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "pet"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/updatePetWithForm/pet')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'updatePetWithForm')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "petId",
+            "description": "Format - int64. ID of pet to update",
+            "type": "integer",
+            "required": true,
+            "values": []
+          }
+        ],
+        "description": "",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": [
+            {
+              "contentType": "multipart/form-data",
+              "formParameters": [
+                {
+                  "name": "additionalMetadata",
+                  "description": "Additional data to pass to server",
+                  "type": "string",
+                  "required": false,
+                  "values": []
+                },
+                {
+                  "name": "file",
+                  "description": "file to upload",
+                  "type": "file",
+                  "required": false,
+                  "values": []
+                }
+              ]
+            }
+          ]
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "successful operation",
+            "headers": [],
+            "representations": [
+              {
+                "contentType": "application/json",
+                "schemaId": "5ea5e2fd02419a12083d2a81",
+                "typeName": "ApiResponse"
+              }
+            ]
+          }
+        ],
+        "displayName": "uploads an image",
+        "method": "POST",
+        "urlTemplate": "/pet/{petId}/uploadImage"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/uploadFile')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'swagger-petstore-yaml')]",
+        "[resourceId('Microsoft.ApiManagement/service/apis/schemas', parameters('ApimServiceName'), 'swagger-petstore-yaml', '5ea5e2fd02419a12083d2a81')]"
+      ]
+    },
+    {
+      "properties": {
+        "displayName": "pet"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/swagger-petstore-yaml/uploadFile/pet')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/tags",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'swagger-petstore-yaml', 'uploadFile')]"
+      ]
+    }
+  ]
+}
