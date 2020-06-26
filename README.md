@@ -1,6 +1,9 @@
 ![APIM Dev Contoso Service](https://github.com/romerve/rvlabs-apim-devops/workflows/APIM%20Dev%20Contoso%20Service/badge.svg)
 ![APIM Dev Contoso APIs](https://github.com/romerve/rvlabs-apim-devops/workflows/APIM%20Dev%20Contoso%20APIs/badge.svg)
 
+![APIM Prod Contoso Service](https://github.com/romerve/rvlabs-apim-devops/workflows/APIM%20Prod%20Contoso%20Service/badge.svg)
+![APIM Prod Contoso APIs](https://github.com/romerve/rvlabs-apim-devops/workflows/APIM%20Prod%20Contoso%20APIs/badge.svg)
+
 # Adopting a DevOps process in Azure API Management using Azure APIM DevOps Resource Kit
 
 This article was inspired by [Azure/Azure-Api-Management-DevOps-Reource-Kit](https://github.com/Azure/azure-api-management-devops-resource-kit) and targets the HowTo process vs the semantics of the problem and the proposed solution, which are very well defined i the Resource Kit GitHub page.
