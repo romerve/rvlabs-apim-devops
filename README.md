@@ -1,6 +1,5 @@
 ![APIM Dev Contoso Service](https://github.com/romerve/rvlabs-apim-devops/workflows/APIM%20Dev%20Contoso%20Service/badge.svg)
 ![APIM Dev Contoso APIs](https://github.com/romerve/rvlabs-apim-devops/workflows/APIM%20Dev%20Contoso%20APIs/badge.svg)
-
 ![APIM Prod Contoso Service](https://github.com/romerve/rvlabs-apim-devops/workflows/APIM%20Prod%20Contoso%20Service/badge.svg)
 ![APIM Prod Contoso APIs](https://github.com/romerve/rvlabs-apim-devops/workflows/APIM%20Prod%20Contoso%20APIs/badge.svg)
 
