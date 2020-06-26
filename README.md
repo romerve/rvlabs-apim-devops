@@ -6,7 +6,7 @@
 
 # Adopting a DevOps process in Azure API Management using Azure APIM DevOps Resource Kit
 
-This article was inspired by [Azure/Azure-Api-Management-DevOps-Reource-Kit](https://github.com/Azure/azure-api-management-devops-resource-kit) and targets the HowTo process vs the semantics of the problem and the proposed solution, which are very well defined i the Resource Kit GitHub page.
+This article was inspired by [Azure/Azure-Api-Management-DevOps-Resource-Kit](https://github.com/Azure/azure-api-management-devops-resource-kit) and targets the HowTo process vs the semantics of the problem and the proposed solution, which are very well defined i the Resource Kit GitHub page.
 
 In this scenario our Azure API Management service (APIM for short) has been deployed and in production for some time already, the API publishers and API developers all use the Azure Portal to operate the service and launch new APIs. Publishers and Developers have agreed that it is time to adopt a DevOps process to streamline the development, management, and environment promotion of their APIs. 
 
@@ -20,7 +20,7 @@ This is a transformation journey, thus it is important to keep in mind that the 
 
 ## Provision Dev environment
 
-The Dev environment is created by taking a snapshop of Prod to achieve symmetric between the two environments. During this step the two instances are not synchronized, therefore, you can either abstain from making changes to Prod, or repeat the initial manual deployment of Dev. We will:
+The Dev environment is created by taking a snapshot of Prod to achieve symmetric between the two environments. During this step the two instances are not synchronized, therefore, you can either abstain from making changes to Prod, or repeat the initial manual deployment of Dev. We will:
 - Use the *extractor* tool to capture the current Prod deployment, 
 - Check the Prod ARM templates into a new repository, and create a dev branch, 
 - Deploy dev branch to our Dev environment 
@@ -33,7 +33,7 @@ To help us visualize the process let's take a look at the following diagram:
 
 Because we are in a transformation journey, we want the capture to entirely reflect Prod, thus the config used for the Extractor is set to use the production APIM as the source and the destination, this way the ARM templates generated are always production ready. Remember, we are creating development off production, we will override parameters at deployment time to target the Dev instance.
 
-The config file defines how the Extractor will generate the templates, the following **apimExtract.json** will use the same instance as the source and target, split each API into its own entity, and parametarize most of the assets needed. 
+The config file defines how the Extractor will generate the templates, the following **apimExtract.json** will use the same instance as the source and target, split each API into its own entity, and parameterize most of the assets needed. 
 
 ```json
 {
@@ -80,8 +80,8 @@ Checkpoint: by now you should have:
 
 I'll be using *GitHub Actions* to automate deployments to Dev APIM and subsequently to Prod APIM. 
 
-The workflow [**Dev-Apim-Service.yaml**](../.github/workflows/Dev-Apim-Service.yml) has the following responsabilities:
-1. Set environmental variables at the job scope so they can be used across the entire worflow. Besides specifiying the dev resources to target, we use a built in variable **GITHUB_REF** to build URLs used for dev deployments. Additionally, because service level changes and APIs can be develop at different rates, we use **On.Push.Paths** to specifcally where service level templates are placed. 
+The workflow [**Dev-Apim-Service.yaml**](../.github/workflows/Dev-Apim-Service.yml) has the following responsibilities:
+1. Set environmental variables at the job scope so they can be used across the entire workflow. Besides specifying the dev resources to target, we use a built in variable **GITHUB_REF** to build URLs used for dev deployments. Additionally, because service level changes and APIs can be develop at different rates, we use **On.Push.Paths** to specifically where service level templates are placed. 
 2. Uses the Checkout Action and the Azure Login Action. The Azure Login action makes use of a service principal to login and run commands against your Azure subscription. To create and use a service principal, create a GitHub secret with the output of:
 ```bash
 az ad sp create-for-rbac
@@ -101,7 +101,7 @@ Before continuing, this would be a good place to validate the Dev instance and e
 
 Once the initial Dev APIM has been created it is important that the two personas: API publishers, and API developers incorporate new steps in their process. Typically, API publishers will use the Azure Portal to make changes, and API developers would be working with OpenAPI, but this could also cause configuration drift, and having the two instances running different APIs. 
 
-Therefore, API publishers and developer need to incorporate the Azure APIM Resouce Kiy in their process workflow. need use the Extractor tool as the last step in their process.
+Therefore, API publishers and developer need to incorporate the Azure APIM Resource Kit in their process workflow. need use the Extractor tool as the last step in their process.
 
 ### For API publishers
 
