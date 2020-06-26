@@ -1,4 +1,4 @@
-version: 0.0.1   # Required - Test comment - test2 - t3
+version: 0.0.1   # Required - T1
 apimServiceName: apim-contoso   # Required, must match name of an apim service deployed in the specified resource group
 apis:
   - name: petstore   # Required

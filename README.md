@@ -1,5 +1,5 @@
-Prod: ![apim-cicd](https://github.com/romerve/RvLabs/workflows/apim-cicd/badge.svg)
-Dev: ![apim-cicd-dev](https://github.com/romerve/RvLabs/workflows/apim-cicd-dev/badge.svg?branch=dev)
+![APIM Dev Contoso Service](https://github.com/romerve/rvlabs-apim-devops/workflows/APIM%20Dev%20Contoso%20Service/badge.svg)
+![APIM Dev Contoso APIs](https://github.com/romerve/rvlabs-apim-devops/workflows/APIM%20Dev%20Contoso%20APIs/badge.svg)
 
 # Adopting a DevOps process in Azure API Management using Azure APIM DevOps Resource Kit
 
