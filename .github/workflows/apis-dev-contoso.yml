@@ -35,7 +35,7 @@ jobs:
     - name: Azure Login
       uses: Azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_APIMS_CONTOSO }}
+        creds: ${{ secrets.RVLABS_APIMS_CONTOSO }}
 
     # ARM deployment tasks  
     - name: Deploy APIs
