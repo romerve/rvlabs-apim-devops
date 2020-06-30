@@ -6,7 +6,7 @@
 
 # Adopting a DevOps process in Azure API Management using Azure APIM DevOps Resource Kit
 
-This article was inspired by [Azure/Azure-Api-Management-DevOps-Resource-Kit](https://github.com/Azure/azure-api-management-devops-resource-kit) and targets the HowTo process vs the semantics of the problem and the proposed solution, which are very well defined i the Resource Kit GitHub page.
+This article was inspired by [Azure/Azure-Api-Management-DevOps-Resource-Kit](https://github.com/Azure/azure-api-management-devops-resource-kit) and targets the How-To process vs the semantics of the problem and the proposed solution, which are very well defined in the Resource Kit GitHub page as well as providing release builds and source code for the tools used throughout this guide.
 
 In this scenario our Azure API Management service (APIM for short) has been deployed and in production for some time already, the API publishers and API developers all use the Azure Portal to operate the service and launch new APIs. Publishers and Developers have agreed that it is time to adopt a DevOps process to streamline the development, management, and environment promotion of their APIs. 
 
